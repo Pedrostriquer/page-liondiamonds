@@ -1,0 +1,119 @@
+.clients-wrapper {
+    background-color: #f8f9fa; /* Um cinza claro para diferenciar da seção anterior */
+    padding: 70px 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.clients-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clients-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #122C4F;
+    margin-bottom: 40px;
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.testimonial-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    padding: 40px 50px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-quote-icon {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 6em;
+    color: #122C4F;
+    opacity: 0.08;
+    font-family: 'Georgia', serif;
+}
+
+/* Animação de fade para o conteúdo */
+.testimonial-content {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.testimonial-comment {
+    font-size: 1.2em;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.testimonial-author-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.testimonial-author-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #EDEFF2;
+}
+
+.testimonial-author-name {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #122C4F;
+}
+
+/* Estilos para a navegação por pontos */
+.testimonial-nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #c5c5d6;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-dot:hover {
+    background-color: #122C4F;
+    transform: scale(1.2);
+}
+
+.nav-dot.active {
+    background-color: #122C4F;
+    transform: scale(1.2);
+}

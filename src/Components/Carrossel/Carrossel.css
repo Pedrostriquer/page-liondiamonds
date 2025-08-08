@@ -1,0 +1,129 @@
+/* Contêiner principal da seção do carrossel */
+.carrossel {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #EDEFF2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Contêiner que alinha as setas e a área dos cards */
+.carrossel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Espaçamento entre as setas e a área dos cards */
+    width: 100%;
+}
+
+/* A "janela" visível. A largura é definida dinamicamente via JS. */
+.carrossel-wrapper {
+    display: flex;
+    overflow: hidden;
+    transition: width 0.5s ease-in-out; /* Animação suave quando a largura muda */
+    gap: 20px;
+    padding: 0 10px;
+}
+
+/* A área que desliza e contém todos os cards */
+.carrossel-area {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre os cards */
+    transition: transform 0.5s ease-in-out; /* Animação de deslizamento */
+}
+
+/* --- Estilos dos Cards (Inalterado) --- */
+.carrossel-card {
+    background-color: #EDEFF2;
+    width: 160px;
+    height: 190px;
+    display: grid;
+    grid-template-rows: 5fr 1fr;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    flex-shrink: 0; /* Impede que os cards sejam espremidos */
+}
+
+.carrossel-card:hover {
+    transform: scale(1.05);
+}
+
+.carrossel-card-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #122c4f45;
+    padding-bottom: 5px;
+}
+
+.carrossel-img {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(3px 3px 5px rgba(18, 44, 79, 0.27));
+}
+
+.carrossel-card-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #122c4f45;
+    border-top: none;
+}
+
+.carrossel-card-text p {
+    margin: 0;
+    color: #122C4F;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* --- Estilos das Setas (Revisado) --- */
+.container-arrow {
+    width: 40px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #122C4F;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    flex-shrink: 0; /* Impede que as setas encolham */
+}
+
+.container-arrow:hover {
+    background-color: #0d1f3a;
+}
+
+.container-arrow.disabled {
+    cursor: not-allowed;
+}
+
+.arrow-icon-carrossel {
+    width: 20px;
+}
+
+/* --- Botão de Busca (Inalterado) --- */
+.carrossel-search-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carrossel-search-button button {
+    width: 200px;
+    height: 35px;
+    border: none;
+    background-color: #122C4F;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.carrossel-search-button button:hover {
+    background-color: #0d1f3a;
+}

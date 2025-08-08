@@ -1,0 +1,42 @@
+.bunner2{
+    background-color: #EDEFF2;
+}
+
+.bunner2-container-img1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.bunner2-img-1{
+    width: 33%;
+    height: 33%;
+    margin: 10px;
+
+}
+
+.bunner2-container-img2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+}
+
+.bunner2-img-2{
+    width: 100%;
+    height: 330px;
+}
+
+.bunner2-container-img3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bunner2-img-3{
+    width: 30%;
+    height: 30%;
+    margin: 20px;
+}
+

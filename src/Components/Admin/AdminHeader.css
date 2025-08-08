@@ -1,0 +1,83 @@
+/* --- Estilos para o Editor do Header --- */
+.header-editor-controls {
+    margin-bottom: 20px;
+}
+.add-nav-item-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+.add-nav-item-button:hover {
+    background-color: #0056b3;
+}
+.header-text-editor {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.nav-text-section {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+.nav-text-section label {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #555;
+}
+.nav-text-section input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+.dropdown-label {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.95em;
+}
+.dropdown-items-list {
+    margin-bottom: 15px;
+}
+.dropdown-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.dropdown-item-row input[type="text"] {
+    flex-grow: 1;
+    margin: 0;
+}
+.add-item-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+    margin-top: 5px;
+}
+.add-item-button:hover {
+    background-color: #0056b3;
+}
+.remove-nav-item-button {
+    width: 100%;
+}

@@ -1,0 +1,172 @@
+/* --- Estilos para o Editor do Banner Principal --- */
+.main-banner-editor {
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin-top: 20px;
+}
+
+.banner-dimension-controls {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.banner-dimension-controls h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.dimension-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+.dimension-row {
+    display: flex;
+    flex-direction: column;
+}
+.dimension-row label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+}
+.dimension-row input[type="number"] {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.banner-settings-grid {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+.banner-arrow-control label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+}
+.banner-speed-control {
+    display: flex;
+    flex-direction: column;
+}
+.banner-speed-control label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.banner-slides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+.banner-slide-editor {
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.banner-slide-editor h4 {
+    margin: 0 0 10px 0;
+}
+.banner-slide-editor label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.banner-slide-editor input[type="text"] {
+    width: calc(100% - 16px);
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.drop-zone {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    border: 2px dashed #ced4da;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+    background-color: #f0f8ff;
+    border-color: #007bff;
+}
+.banner-media-preview {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+}
+.banner-media-preview img, .banner-media-preview video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+}
+.drop-zone-overlay {
+    position: relative;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    color: #333;
+    font-size: 0.9em;
+    pointer-events: none;
+}
+
+.image-info {
+    font-size: 0.85em;
+    color: #666;
+    text-align: center;
+    margin-top: 8px;
+    padding: 5px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+.dimension-info {
+    font-weight: bold;
+    color: #333;
+}
+.ideal-dimension {
+    color: #28a745;
+}
+
+.banner-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.add-slide-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+.add-slide-button:hover {
+    background-color: #0056b3;
+}
