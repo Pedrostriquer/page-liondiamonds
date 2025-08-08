@@ -1,0 +1,70 @@
+.about-us-wrapper {
+    background-color: #ffffff; /* Fundo branco para destacar a seção */
+    padding: 70px 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.about-us-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-main-section {
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-size: 2.5em;
+    color: #122C4F;
+    margin-bottom: 20px;
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.about-text {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto; /* Centraliza o parágrafo */
+    white-space: pre-wrap; /* Respeita as quebras de linha do texto do admin */
+}
+
+.mission-vision-section {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap; /* Permite que quebre a linha em telas menores */
+}
+
+.mission-box,
+.vision-box {
+    flex: 1;
+    min-width: 300px; /* Largura mínima antes de quebrar a linha */
+    max-width: 450px;
+    padding: 30px;
+    background-color: #f8f9fa; /* Um cinza bem claro para diferenciar */
+    border-radius: 8px;
+    border-top: 3px solid #122C4F;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.sub-section-title {
+    font-size: 1.8em;
+    color: #122C4F;
+    margin-bottom: 15px;
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+}
+
+.sub-text {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.6;
+    white-space: pre-wrap; /* Respeita as quebras de linha do texto do admin */
+}

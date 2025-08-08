@@ -1,0 +1,23 @@
+.bunner3{
+    background-color: #EDEFF2;
+}
+
+.bunner3-container-img1{
+    display: flex;
+}
+
+.bunner3-img-1{
+    width: 100%;
+    height: 550px;
+}
+
+.bunner3-container-img2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bunner3-img-2{
+    margin: 20px;
+    width: 30%;
+}

@@ -1,0 +1,12 @@
+.body {
+    background-color: #ffffff;
+}
+
+.body-banner-wrapper {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 0px;
+    /* Adicionamos display flex para centralizar o banner quando ele for menor que a tela */
+    display: flex;
+    justify-content: center;
+}
