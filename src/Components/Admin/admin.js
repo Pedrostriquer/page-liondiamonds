@@ -9,6 +9,7 @@ import { storage } from "../../firebaseConfig";
 import BannerSlideEditor from "./BannerSlideEditor";
 import FooterEditor from "./FooterEditor";
 import FaqEditor from "./FaqEditor";
+import ProductCarouselEditor from "./ProductCarouselEditor"; // Importação já estava correta
 
 // --- COMPONENTES AUXILIARES INTERNOS ---
 
@@ -44,33 +45,7 @@ const NavTextSection = ({ item, index, handleTitleChange, handleIndividualDropdo
     </div>
 );
 
-const CarouselCardEditor = ({ card, cardIndex, carouselType, onRemoveCard, handleCarouselCardTitleChange, handleDynamicImageUpload }) => (
-    <div className="carousel-card-editor">
-        <h4>Card {cardIndex + 1}</h4>
-        <div className="card-image-preview">
-            <img src={card.imageSrc || 'https://via.placeholder.com/100'} alt={`Card ${cardIndex + 1}`} />
-        </div>
-        <label>
-            Título:
-        </label>
-        <input
-            type="text"
-            value={card.title}
-            onChange={(e) => handleCarouselCardTitleChange(e, carouselType, cardIndex)}
-        />
-        <label>
-            Trocar Imagem:
-        </label>
-        <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleDynamicImageUpload(e.target.files[0], carouselType, cardIndex)}
-        />
-        <button onClick={() => onRemoveCard(cardIndex)} className="remove-card-button">Remover Card</button>
-    </div>
-);
-
-const TestimonialEditor = ({ testimonial, index, handleDynamicImageUpload, handleTestimonialChange, handleRemoveTestimonial }) => (
+const TestimonialEditor = ({ testimonial, index, handleDynamicMediaUpload, handleTestimonialChange, handleRemoveTestimonial }) => (
     <div className="testimonial-editor">
         <h4>Depoimento {index + 1}</h4>
         <div className="testimonial-image-preview">
@@ -82,7 +57,7 @@ const TestimonialEditor = ({ testimonial, index, handleDynamicImageUpload, handl
         <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleDynamicImageUpload(e.target.files[0], 'testimonial', index)}
+            onChange={(e) => handleDynamicMediaUpload(e.target.files[0], 'testimonial', index)}
         />
         <label>
             Comentário:
@@ -109,13 +84,12 @@ const generateUniqueId = () => Date.now().toString() + Math.random().toString(36
 // --- COMPONENTE PRINCIPAL DO ADMIN ---
 export default function Admin({
     onImageUpload, onNavTextUpdate, headerNavData,
-    carousel1Data, onCarousel1DataUpdate,
-    carousel2Data, onCarousel2DataUpdate,
     clientsTestimonials, onClientsTestimonialsUpdate,
     mainBannerData, mainBannerSpeed, mainBannerShowArrows, mainBannerWidth, mainBannerHeight, onMainBannerUpdate,
     aboutData, onAboutDataUpdate,
     footerData, onFooterDataUpdate,
-    faqData, onFaqDataUpdate
+    faqData, onFaqDataUpdate,
+    productCarousel1, productCarousel2, onProductCarouselUpdate
 }) {
     // --- STATES E REFS ---
     const [progress, setProgress] = useState(0);
@@ -127,8 +101,6 @@ export default function Admin({
     const bunner3Img1InputRef = useRef(null);
 
     const [localNavData, setLocalNavData] = useState(headerNavData);
-    const [localCarousel1Data, setLocalCarousel1Data] = useState(carousel1Data);
-    const [localCarousel2Data, setLocalCarousel2Data] = useState(carousel2Data);
     const [localClientsTestimonials, setLocalClientsTestimonials] = useState(clientsTestimonials);
     const [localAboutData, setLocalAboutData] = useState(aboutData);
     const [localFooterData, setLocalFooterData] = useState(footerData);
@@ -140,10 +112,11 @@ export default function Admin({
     const [localMainBannerWidth, setLocalMainBannerWidth] = useState(mainBannerWidth);
     const [localMainBannerHeight, setLocalMainBannerHeight] = useState(mainBannerHeight);
 
+    const [localProductCarousel1, setLocalProductCarousel1] = useState(productCarousel1);
+    const [localProductCarousel2, setLocalProductCarousel2] = useState(productCarousel2);
+
     // --- USEEFFECTS PARA SINCRONIZAÇÃO ---
     useEffect(() => setLocalNavData(headerNavData), [headerNavData]);
-    useEffect(() => setLocalCarousel1Data(carousel1Data), [carousel1Data]);
-    useEffect(() => setLocalCarousel2Data(carousel2Data), [carousel2Data]);
     useEffect(() => setLocalClientsTestimonials(clientsTestimonials), [clientsTestimonials]);
     useEffect(() => setLocalAboutData(aboutData), [aboutData]);
     useEffect(() => setLocalFooterData(footerData), [footerData]);
@@ -153,6 +126,8 @@ export default function Admin({
     useEffect(() => setLocalMainBannerShowArrows(mainBannerShowArrows), [mainBannerShowArrows]);
     useEffect(() => setLocalMainBannerWidth(mainBannerWidth), [mainBannerWidth]);
     useEffect(() => setLocalMainBannerHeight(mainBannerHeight), [mainBannerHeight]);
+    useEffect(() => setLocalProductCarousel1(productCarousel1), [productCarousel1]);
+    useEffect(() => setLocalProductCarousel2(productCarousel2), [productCarousel2]);
     
     // --- LÓGICA DE UPLOAD ---
     const handleFileUpload = (file, path, callback) => {
@@ -182,9 +157,8 @@ export default function Admin({
             const mediaType = fileType.startsWith('video') ? 'video' : 'image';
             if (itemType === 'mainBanner') {
                 setLocalMainBannerData(prev => prev.map((slide, i) => i === itemIndex ? { ...slide, src: url, type: mediaType } : slide));
-            } else {
-                const setData = {'carousel1': setLocalCarousel1Data, 'carousel2': setLocalCarousel2Data, 'testimonial': setLocalClientsTestimonials}[itemType];
-                if (setData) setData(prev => prev.map((item, i) => i === itemIndex ? { ...item, imageSrc: url } : item));
+            } else if (itemType === 'testimonial') {
+                setLocalClientsTestimonials(prev => prev.map((item, i) => i === itemIndex ? { ...item, imageSrc: url } : item));
             }
         });
     };
@@ -208,17 +182,43 @@ export default function Admin({
         setMessage('Banner principal salvo!');
     };
 
-    // --- HANDLERS DOS CARROSSÉIS PEQUENOS ---
-    const handleCarouselCardTitleChange = (e, type, index) => {
-        const setData = type === 'carousel1' ? setLocalCarousel1Data : setLocalCarousel2Data;
-        setData(prev => prev.map((card, i) => i === index ? { ...card, title: e.target.value } : card));
+    // --- HANDLERS DOS CARROSSÉIS DE PRODUTOS ---
+    const handleProductCarouselChange = (carouselId, field, value) => {
+        const setter = carouselId === 'carousel1' ? setLocalProductCarousel1 : setLocalProductCarousel2;
+        setter(prev => ({ ...prev, [field]: value }));
     };
-    const handleAddCarousel1Card = () => setLocalCarousel1Data(prev => [...prev, { id: generateUniqueId(), imageSrc: '', title: 'Novo Card' }]);
-    const handleAddCarousel2Card = () => setLocalCarousel2Data(prev => [...prev, { id: generateUniqueId(), imageSrc: '', title: 'Novo Card' }]);
-    const handleRemoveCarousel1Card = (index) => setLocalCarousel1Data(prev => prev.filter((_, i) => i !== index));
-    const handleRemoveCarousel2Card = (index) => setLocalCarousel2Data(prev => prev.filter((_, i) => i !== index));
-    const handleSaveCarousel1Data = () => { onCarousel1DataUpdate(localCarousel1Data); setMessage('Carrossel 1 salvo!'); };
-    const handleSaveCarousel2Data = () => { onCarousel2DataUpdate(localCarousel2Data); setMessage('Carrossel 2 salvo!'); };
+    const handleProductCardChange = (carouselId, cardIndex, field, value) => {
+        const setter = carouselId === 'carousel1' ? setLocalProductCarousel1 : setLocalProductCarousel2;
+        setter(prev => {
+            const newCards = [...(prev.cards || [])];
+            newCards[cardIndex] = { ...newCards[cardIndex], [field]: value };
+            return { ...prev, cards: newCards };
+        });
+    };
+    const handleAddProductCard = (carouselId) => {
+        const setter = carouselId === 'carousel1' ? setLocalProductCarousel1 : setLocalProductCarousel2;
+        const newCard = { id: generateUniqueId(), title: 'Novo Card', imageSrc: '', link: '' };
+        setter(prev => ({ ...prev, cards: [...(prev.cards || []), newCard] }));
+    };
+    const handleRemoveProductCard = (carouselId, cardIndex) => {
+        const setter = carouselId === 'carousel1' ? setLocalProductCarousel1 : setLocalProductCarousel2;
+        setter(prev => ({ ...prev, cards: prev.cards.filter((_, i) => i !== cardIndex) }));
+    };
+    const handleProductCarouselImageUpload = (file, carouselId, cardIndex) => {
+        handleFileUpload(file, 'media', (url) => {
+            const setter = carouselId === 'carousel1' ? setLocalProductCarousel1 : setLocalProductCarousel2;
+            setter(prev => {
+                const newCards = [...prev.cards];
+                newCards[cardIndex] = { ...newCards[cardIndex], imageSrc: url };
+                return { ...prev, cards: newCards };
+            });
+        });
+    };
+    const handleSaveProductCarousels = () => {
+        onProductCarouselUpdate('carousel1', localProductCarousel1);
+        onProductCarouselUpdate('carousel2', localProductCarousel2);
+        setMessage('Carrosséis de produtos salvos!');
+    };
 
     // --- HANDLERS DOS DEPOIMENTOS ---
     const handleTestimonialChange = (e, index, field) => setLocalClientsTestimonials(prev => prev.map((item, i) => i === index ? { ...item, [field]: e.target.value } : item));
@@ -270,15 +270,7 @@ export default function Admin({
                     {isUploading && <div className="progress-bar-container"><div className="progress-bar" style={{ width: `${progress}%` }}>{Math.round(progress)}%</div></div>}
                     <div className="banner-slides-grid">
                         {localMainBannerData.map((slide, index) => (
-                            <BannerSlideEditor 
-                                key={slide.id || index} 
-                                slide={slide} 
-                                index={index} 
-                                bannerHeight={localMainBannerHeight} 
-                                onMediaSelect={(file) => handleDynamicMediaUpload(file, 'mainBanner', index)} 
-                                onLinkChange={handleLinkChange} 
-                                onRemove={handleRemoveSlide} 
-                            />
+                            <BannerSlideEditor key={slide.id || index} slide={slide} index={index} bannerHeight={localMainBannerHeight} onMediaSelect={handleDynamicMediaUpload} onLinkChange={handleLinkChange} onRemove={handleRemoveSlide} />
                         ))}
                     </div>
                     <div className="banner-controls">
@@ -310,32 +302,23 @@ export default function Admin({
                 <UploadSection label="Banner 3 (Img 1)" type="bunner3Img1" inputRef={bunner3Img1InputRef} handleSingleImageUpload={handleSingleImageUpload} />
             </section>
 
-            <section>
-                <h3>Edição de Carrosséis</h3>
-                <h4>Carrossel 1 (Pequeno)</h4>
-                <div className="carousel-editor-grid">
-                    {localCarousel1Data.map((card, index) => (
-                        <CarouselCardEditor key={card.id || index} card={card} cardIndex={index} carouselType="carousel1" onRemoveCard={handleRemoveCarousel1Card} handleCarouselCardTitleChange={handleCarouselCardTitleChange} handleDynamicImageUpload={handleDynamicMediaUpload} />
-                    ))}
-                </div>
-                <button onClick={handleAddCarousel1Card} className="add-carousel-card-button">Adicionar Card</button>
-                <button onClick={handleSaveCarousel1Data} className="save-carousel-button">Salvar Carrossel 1</button>
-
-                <h4 style={{marginTop: '40px'}}>Carrossel 2 (Pequeno)</h4>
-                <div className="carousel-editor-grid">
-                    {localCarousel2Data.map((card, index) => (
-                        <CarouselCardEditor key={card.id || index} card={card} cardIndex={index} carouselType="carousel2" onRemoveCard={handleRemoveCarousel2Card} handleCarouselCardTitleChange={handleCarouselCardTitleChange} handleDynamicImageUpload={handleDynamicMediaUpload} />
-                    ))}
-                </div>
-                <button onClick={handleAddCarousel2Card} className="add-carousel-card-button">Adicionar Card</button>
-                <button onClick={handleSaveCarousel2Data} className="save-carousel-button">Salvar Carrossel 2</button>
-            </section>
+            {/* ESTA É A SEÇÃO QUE FOI RE-ADICIONADA */}
+            <ProductCarouselEditor
+                localProductCarousel1={localProductCarousel1}
+                localProductCarousel2={localProductCarousel2}
+                onCarouselChange={handleProductCarouselChange}
+                onCardChange={handleProductCardChange}
+                onAddCard={handleAddProductCard}
+                onRemoveCard={handleRemoveProductCard}
+                onImageUpload={handleProductCarouselImageUpload}
+                onSaveChanges={handleSaveProductCarousels}
+            />
             
             <section>
                 <h3>Depoimentos de Clientes</h3>
                 <div className="testimonial-editor-grid">
                     {localClientsTestimonials.map((testimonial, index) => (
-                        <TestimonialEditor key={testimonial.id || index} testimonial={testimonial} index={index} handleDynamicImageUpload={handleDynamicMediaUpload} handleTestimonialChange={handleTestimonialChange} handleRemoveTestimonial={handleRemoveTestimonial} />
+                        <TestimonialEditor key={testimonial.id || index} testimonial={testimonial} index={index} handleDynamicMediaUpload={handleDynamicMediaUpload} handleTestimonialChange={handleTestimonialChange} handleRemoveTestimonial={handleRemoveTestimonial} />
                     ))}
                 </div>
                 <button onClick={handleAddTestimonial} className="add-testimonial-button">Adicionar Depoimento</button>

@@ -6,9 +6,8 @@ import Footer from './Components/Footer/Footer';
 import Body from './Components/Body/Body';
 import AboutSection from './Components/AboutSection/AboutSection';
 import FaqSection from './Components/FaqSection/FaqSection';
-import Carrossel from './Components/Carrossel/Carrossel';
+import ProductCarousel from './Components/ProductCarousel/ProductCarousel';
 import Bunner2 from './Components/Banner2/Bunner2';
-import Carrossel2 from './Components/Carrossel2/Carrossel2';
 import Bunner3 from './Components/Banner3/Bunner3';
 import Clients from './Components/Clients/Clients';
 import Admin from './Components/Admin/admin';
@@ -29,8 +28,6 @@ function App() {
   const [currentBunner2Img2Url, setCurrentBunner2Img2Url] = useState('');
   const [currentBunner3Img1Url, setCurrentBunner3Img1Url] = useState('');
   const [clientsTestimonials, setClientsTestimonials] = useState([]);
-  const [carousel1Data, setCarousel1Data] = useState([]);
-  const [carousel2Data, setCarousel2Data] = useState([]);
   const [headerNavData, setHeaderNavData] = useState([]);
   const [aboutData, setAboutData] = useState(null);
   const [footerData, setFooterData] = useState(null);
@@ -42,6 +39,10 @@ function App() {
   const [mainBannerShowArrows, setMainBannerShowArrows] = useState(true);
   const [mainBannerWidth, setMainBannerWidth] = useState(1920);
   const [mainBannerHeight, setMainBannerHeight] = useState(600);
+  
+  // --- States para os Carrosséis de Produtos ---
+  const [productCarousel1, setProductCarousel1] = useState({ title: "Explore Nossas Gemas", cards: [] });
+  const [productCarousel2, setProductCarousel2] = useState({ title: "Joias Exclusivas", cards: [] });
 
   const appConfigDocRef = doc(db, "appData", "config");
 
@@ -49,9 +50,8 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (_user) => {
       setUser(_user);
-      setAuthIsReady(true); // Marca que a verificação inicial foi concluída
+      setAuthIsReady(true);
     });
-    // Limpa a inscrição quando o componente é desmontado
     return () => unsubscribe();
   }, []);
 
@@ -61,8 +61,6 @@ function App() {
     bunner2Img2Url: currentBunner2Img2Url,
     bunner3Img1Url: currentBunner3Img1Url,
     clientsTestimonials,
-    carousel1Data,
-    carousel2Data,
     headerNavData,
     mainBannerData,
     mainBannerSpeed,
@@ -72,6 +70,8 @@ function App() {
     aboutData,
     footerData,
     faqData,
+    productCarousel1,
+    productCarousel2,
   });
 
   // Efeito para carregar dados do Firestore na inicialização
@@ -84,8 +84,6 @@ function App() {
             bunner2Img2Url: '',
             bunner3Img1Url: '',
             clientsTestimonials: [],
-            carousel1Data: [],
-            carousel2Data: [],
             headerNavData: [],
             mainBannerData: [],
             mainBannerSpeed: 5000,
@@ -94,10 +92,9 @@ function App() {
             mainBannerHeight: 600,
             aboutData: { title: "SOBRE A GEMAS BRILHANTES", mainText: "...", missionTitle: "MISSÃO", missionText: "...", visionTitle: "VISÃO", visionText: "..." },
             footerData: { phone: "0800 (Whatsapp)", email: "atendimento@gemasbrilhantes.com.br", whatsappNumber: "5511999999999", instagram: "https://instagram.com", facebook: "https://facebook.com", youtube: "https://youtube.com", tiktok: "https://tiktok.com" },
-            faqData: [
-              {id: 'faq1', question: 'Qual é a procedência das gemas?', answer: 'Todas as nossas gemas são cuidadosamente selecionadas...'},
-              {id: 'faq2', question: 'Vocês oferecem certificado de autenticidade?', answer: 'Sim, cada gema preciosa adquirida vem com um certificado...'},
-            ]
+            faqData: [],
+            productCarousel1: { title: "Explore Nossas Gemas", cards: [] },
+            productCarousel2: { title: "Joias Exclusivas", cards: [] },
         };
 
         if (docSnap.exists()) {
@@ -106,8 +103,6 @@ function App() {
           setCurrentBunner2Img2Url(data.bunner2Img2Url || defaultConfig.bunner2Img2Url);
           setCurrentBunner3Img1Url(data.bunner3Img1Url || defaultConfig.bunner3Img1Url);
           setClientsTestimonials(data.clientsTestimonials || defaultConfig.clientsTestimonials);
-          setCarousel1Data(data.carousel1Data || defaultConfig.carousel1Data);
-          setCarousel2Data(data.carousel2Data || defaultConfig.carousel2Data);
           setHeaderNavData(data.headerNavData || defaultConfig.headerNavData);
           setMainBannerData(data.mainBannerData || defaultConfig.mainBannerData);
           setMainBannerSpeed(data.mainBannerSpeed !== undefined ? data.mainBannerSpeed : defaultConfig.mainBannerSpeed);
@@ -117,6 +112,8 @@ function App() {
           setAboutData(data.aboutData || defaultConfig.aboutData);
           setFooterData(data.footerData || defaultConfig.footerData);
           setFaqData(data.faqData || defaultConfig.faqData);
+          setProductCarousel1(data.productCarousel1 || defaultConfig.productCarousel1);
+          setProductCarousel2(data.productCarousel2 || defaultConfig.productCarousel2);
         } else {
           await setDoc(appConfigDocRef, defaultConfig);
         }
@@ -124,8 +121,10 @@ function App() {
         console.error("Erro ao carregar configuração: ", e);
       }
     };
-    loadConfig();
-  }, []);
+    if (authIsReady) {
+        loadConfig();
+    }
+  }, [authIsReady, appConfigDocRef]); // CORREÇÃO: Adicionada a dependência que faltava
 
   // Função genérica para salvar no Firestore
   const saveAllConfigToFirestore = async (newConfig) => {
@@ -146,8 +145,6 @@ function App() {
   };
   
   const handleNavTextUpdate = (data) => { setHeaderNavData(data); saveAllConfigToFirestore({ ...getCurrentConfig(), headerNavData: data }); };
-  const handleCarousel1DataUpdate = (data) => { setCarousel1Data(data); saveAllConfigToFirestore({ ...getCurrentConfig(), carousel1Data: data }); };
-  const handleCarousel2DataUpdate = (data) => { setCarousel2Data(data); saveAllConfigToFirestore({ ...getCurrentConfig(), carousel2Data: data }); };
   const handleClientsTestimonialsUpdate = (data) => { setClientsTestimonials(data); saveAllConfigToFirestore({ ...getCurrentConfig(), clientsTestimonials: data }); };
   const handleMainBannerUpdate = (data, speed, showArrows, width, height) => {
       setMainBannerData(data); setMainBannerSpeed(speed); setMainBannerShowArrows(showArrows); setMainBannerWidth(width); setMainBannerHeight(height);
@@ -156,8 +153,16 @@ function App() {
   const handleAboutDataUpdate = (data) => { setAboutData(data); saveAllConfigToFirestore({ ...getCurrentConfig(), aboutData: data }); };
   const handleFooterDataUpdate = (data) => { setFooterData(data); saveAllConfigToFirestore({ ...getCurrentConfig(), footerData: data }); };
   const handleFaqDataUpdate = (data) => { setFaqData(data); saveAllConfigToFirestore({ ...getCurrentConfig(), faqData: data }); };
+  const handleProductCarouselUpdate = (carouselId, data) => {
+    if (carouselId === 'carousel1') {
+      setProductCarousel1(data);
+      saveAllConfigToFirestore({ ...getCurrentConfig(), productCarousel1: data });
+    } else if (carouselId === 'carousel2') {
+      setProductCarousel2(data);
+      saveAllConfigToFirestore({ ...getCurrentConfig(), productCarousel2: data });
+    }
+  };
 
-  // Renderiza um loader simples enquanto o Firebase verifica a autenticação
   if (!authIsReady) {
     return <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>Carregando...</div>;
   }
@@ -170,18 +175,16 @@ function App() {
             <Header logoSrc={currentLogoUrl} navData={headerNavData} />
             <Body mainBannerData={mainBannerData} mainBannerSpeed={mainBannerSpeed} mainBannerShowArrows={mainBannerShowArrows} mainBannerWidth={mainBannerWidth} mainBannerHeight={mainBannerHeight} />
             <AboutSection aboutData={aboutData} />
-            <Carrossel carousel1Data={carousel1Data} />
+            {productCarousel1 && <ProductCarousel title={productCarousel1.title} cards={productCarousel1.cards} />}
             <Bunner2 bunner2Img2Src={currentBunner2Img2Url} />
-            <Carrossel2 carousel2Data={carousel2Data} />
+            {productCarousel2 && <ProductCarousel title={productCarousel2.title} cards={productCarousel2.cards} />}
             <Bunner3 bunner3Img1Src={currentBunner3Img1Url} />
             <Clients clientsTestimonials={clientsTestimonials} />
             <FaqSection faqData={faqData} />
             <Footer footerData={footerData} />
           </>
         } />
-
         <Route path="/login" element={<Login />} />
-
         <Route 
           path="/admin" 
           element={
@@ -189,13 +192,14 @@ function App() {
               <Admin
                 onImageUpload={handleImageUpload}
                 headerNavData={headerNavData} onNavTextUpdate={handleNavTextUpdate}
-                carousel1Data={carousel1Data} onCarousel1DataUpdate={handleCarousel1DataUpdate}
-                carousel2Data={carousel2Data} onCarousel2DataUpdate={handleCarousel2DataUpdate}
                 clientsTestimonials={clientsTestimonials} onClientsTestimonialsUpdate={handleClientsTestimonialsUpdate}
                 mainBannerData={mainBannerData} mainBannerSpeed={mainBannerSpeed} mainBannerShowArrows={mainBannerShowArrows} mainBannerWidth={mainBannerWidth} mainBannerHeight={mainBannerHeight} onMainBannerUpdate={handleMainBannerUpdate}
                 aboutData={aboutData} onAboutDataUpdate={handleAboutDataUpdate}
                 footerData={footerData} onFooterDataUpdate={handleFooterDataUpdate}
                 faqData={faqData} onFaqDataUpdate={handleFaqDataUpdate}
+                productCarousel1={productCarousel1}
+                productCarousel2={productCarousel2}
+                onProductCarouselUpdate={handleProductCarouselUpdate}
               />
             </ProtectedRoute>
           } 
