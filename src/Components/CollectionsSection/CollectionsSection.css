@@ -1,0 +1,102 @@
+/* --- Wrapper Principal --- */
+.collections-wrapper {
+    position: relative; /* Essencial para o posicionamento da faixa de fundo */
+    /* 2. O padding inferior é importante para dar altura à faixa de fundo abaixo dos cards */
+    padding-bottom: 10px; 
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    /* SEM cor de fundo aqui, para manter a cor principal da página */
+}
+
+/* --- A Faixa de Fundo (Agora correta) --- */
+.collections-background {
+    /* 3. A faixa é um elemento posicionado absolutamente */
+    position: absolute;
+    z-index: 1; /* Fica atrás do conteúdo */
+    background-color: #EDEFF2;
+/* A cor que você quer para a faixa */
+    
+    /* 4. Posicionamento para começar atrás dos cards e ir até o fim */
+    top: 290px; /* Distância do topo do wrapper. Ajuste fino se necessário. */
+    left: 0;
+    right: 0;
+    bottom: 0; /* Estica a faixa até o fim do padding do wrapper */
+}
+
+/* --- Container do Conteúdo --- */
+.collections-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative; 
+    z-index: 2; /* Garante que o conteúdo (título e cards) fique sobre a faixa */
+    text-align: center;
+}
+
+.collections-main-title {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 60px;
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+/* --- Alinhamento e Estilo dos Cards (mantidos) --- */
+.collections-flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.collection-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background-color: #fff;
+    width: 250px;
+    height: 330px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    align-items: center;
+}
+
+.collection-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+}
+
+.collection-image {
+    height: 187px;
+    width: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.collection-info {
+    padding: 10px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.collection-title {
+    font-family: 'Georgia', serif;
+    font-size: 1.4em;
+    margin: 0 0 8px 0;
+    color: #122C4F;
+}
+
+.collection-description {
+    font-size: 0.9em;
+    line-height: 1.3;
+    color: #666;
+    margin: 0;
+}
